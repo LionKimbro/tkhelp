@@ -153,7 +153,7 @@ def guess(identifier):
 
 global_tk = None  # Call setup(...) to initialize
 
-def setup(withdraw=True):
+def setup(withdraw=True, title="tkinter"):
     """Establish the global Tk().
     
     Call this method first, before using tkinter.
@@ -164,14 +164,14 @@ def setup(withdraw=True):
     withdraw:  -- set to False, to begin Tk with a window showing
     
     POSSIBLE:
-    * in future, we might make option here to turn on/off scheduling
-    * in future, we might want a fullscreen option here,
-      though contradictory to withdraw.
+    * scheduling=True  [turn on/off a schedule tracker]
+    * fullscreen=False
     """
     global global_tk
     if global_tk is not None:
         return False
     global_tk = tkinter.Tk()
+    global_tk.title(title)
     if withdraw:
         global_tk.withdraw()
     return True
