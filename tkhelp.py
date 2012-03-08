@@ -177,6 +177,7 @@ def setup(withdraw=True, title="tkinter"):
     global_tk.title(title)
     if withdraw:
         global_tk.withdraw()
+    annotate_widget_classes()
     return True
 
 
@@ -321,6 +322,56 @@ def tcl(tcl_code):
     """
     requires_setup()
     return global_tk.tk.eval(tcl_code)
+
+
+def annotate_widget_classes():
+    """Annotate tkinter widget classes with NMT links."""
+    for (classname, url) in [entry.split() for entry in """
+Button http://infohost.nmt.edu/tcc/help/pubs/tkinter/button.html
+Canvas http://infohost.nmt.edu/tcc/help/pubs/tkinter/canvas.html
+Checkbutton http://infohost.nmt.edu/tcc/help/pubs/tkinter/checkbutton.html
+Entry http://infohost.nmt.edu/tcc/help/pubs/tkinter/entry.html
+Frame http://infohost.nmt.edu/tcc/help/pubs/tkinter/frame.html
+Label http://infohost.nmt.edu/tcc/help/pubs/tkinter/label.html
+LabelFrame http://infohost.nmt.edu/tcc/help/pubs/tkinter/labelframe.html
+Listbox http://infohost.nmt.edu/tcc/help/pubs/tkinter/listbox.html
+Menu http://infohost.nmt.edu/tcc/help/pubs/tkinter/menu.html
+Menubutton http://infohost.nmt.edu/tcc/help/pubs/tkinter/menubutton.html
+Message http://infohost.nmt.edu/tcc/help/pubs/tkinter/message.html
+OptionMenu http://infohost.nmt.edu/tcc/help/pubs/tkinter/optionmenu.html
+PanedWindow http://infohost.nmt.edu/tcc/help/pubs/tkinter/panedwindow.html
+Radiobutton http://infohost.nmt.edu/tcc/help/pubs/tkinter/radiobutton.html
+Scale http://infohost.nmt.edu/tcc/help/pubs/tkinter/scale.html
+Scrollbar http://infohost.nmt.edu/tcc/help/pubs/tkinter/scrollbar.html
+Spinbox http://infohost.nmt.edu/tcc/help/pubs/tkinter/spinbox.html
+Text http://infohost.nmt.edu/tcc/help/pubs/tkinter/text.html
+Toplevel http://infohost.nmt.edu/tcc/help/pubs/tkinter/toplevel.html
+"""[1:-1].split("\n")]:
+       getattr(tkinter, classname).nmt_url = url
+
+
+def nmt(identifier=None):
+    """Open New Mexico Tech Tkinter 8.4 Reference for an Object.
+    
+    The object can be:
+    * a widget class,
+    * an instance of a widget class,
+    * an identifier that find(...) can use to resolve a widget
+    
+    In the future, this will also include many functions, such as
+    (widget).bind.
+    """
+    import webbrowser
+    if identifier is None:
+        webbrowser.open("http://infohost.nmt.edu/tcc/help/pubs/tkinter/")
+    elif hasattr(identifier, "nmt_url"):
+       webbrowser.open(identifier.nmt_url)
+    else:
+       obj = find(identifier)
+       if hasattr(obj, "nmt_url"):
+           webbrowser.open(obj.nmt_url)
+       else:
+           raise ValueError(identifier)
 
 
 def test_tree():
