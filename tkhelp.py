@@ -163,6 +163,9 @@ def setup(withdraw=True, title="tkinter"):
     
     withdraw:  -- set to False, to begin Tk with a window showing
     
+    Did you withdraw by mistake?  It's okay, you can get it back:
+      find(".").wm_deiconify()
+    
     POSSIBLE:
     * scheduling=True  [turn on/off a schedule tracker]
     * fullscreen=False
