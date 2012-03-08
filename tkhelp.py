@@ -312,6 +312,17 @@ def print_hierarchy(top=None, highlight=None, widget_str=widget_str):
 hr = print_hierarchy  # Alias for quickly typing
 
 
+def tcl(tcl_code):
+    """Execute tcl code string directly & return the result.
+    
+    Note that you'll probably want to have performed setup WITHOUT withdraw.
+    If it's too late, unwithdraw with:
+      tkhelp.find(".").wm_deiconify()
+    """
+    requires_setup()
+    return global_tk.tk.eval(tcl_code)
+
+
 def test_tree():
     """TO BE DELETED"""
     setup()
