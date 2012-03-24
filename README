@@ -1,11 +1,39 @@
 
-				 tkhelp
+== tkhelp
+=== by Lion Kimbro
 
-The idea is to create a tkinter assistance module that people find so
-easy to use, it’s inspiring.  At the very least, smooth out the bumps in
-tkinter development in a clean way.
+tkhelp fixes bugs and exposes the native tkinter system.
 
-For information, see:
+tkhelp is:
+* workarounds to bugs in tkinter/tk
+** .bind's "add" parameter, and .unbind w/ a funcid
+* missing functionality, such as:
+** widget inspection  (IN PLANNING)
+** scheduling inspection (.after, .after_idle)  (IN PLANNING)
+** locating widgets
+
+tkhelp is NOT:
+* a wrapper around tkinter widgets (*)
+* a framework for creating GUIs
+
+tkhelp is very simple, but can make a huge difference in your tkinter
+programming, because it lets you see what tkinter sees, and then you
+don't have to keep track of so much on your own.
+
+For example, you can print out the widget hierarchy, and then refer to
+widgets by name or ID.  The alternative is to make your own parallel
+data structures and keep track of references to widgets.  Wherever you
+see code like "self.quit_button = tkinter.Button(...)", you are seeing
+evidence of duplicate bookkeeping -- duplicate, because tkinter already
+has a widget tree constructed.  The only thing missing is functions that
+help you see the tree, and find things inside the tree.  That is what
+tkhelp provides.  So when you need to find that button, write:
+"find('quit', origin=self)", and you'll find the first widget named
+"quit" beneath self in the widget hierarchy.  This may look like a small
+thing, but it frees up an enormous amount of mental tracking.
+
+
+See also:
 
 Google DOC:  (for planning, policy, vision, functionality, etc., etc.,.)
   https://docs.google.com/document/d/1TCANkeaBYs_W7Sg9J1ce8Y1X4G6UR1PT3H-iMIuuNFY/edit
@@ -14,3 +42,6 @@ Github Repository:
   https://github.com/LionKimbro/tkhelp
 
 
+(*) There ARE some places where wrapping occurs:
+* binding is wrapped, because binding is broken
+* scheduling is wrapped, because scheduling cannot be introspected
