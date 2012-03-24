@@ -2,11 +2,6 @@
 
 (c) 2012  Lion Kimbro  -- place note here that LGPLs the code
 
-some immediate goals:
-* find a widget
-* pretty print hierarchy of widgets
-* pretty print information about individual widgets
-
 
 Error  -- base exception
 SetupNotCalled  -- exception when global_tk/setup required
@@ -31,6 +26,8 @@ wclass  -- return widget class for a widget
 widget_str  -- descriptive string for a widget
 
 print_hierarchy  -- print out the widget hierarchy from a widget
+
+nmt  -- send web browser to documentation for widget or class
 """
 
 import tkinter
