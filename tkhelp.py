@@ -184,12 +184,12 @@ def requires_setup():
         raise SetupNotCalled()
 
 
-def find_named(name, start_widget=None, throw=True, default=None):
+def find_named(name, origin=None, throw=True, default=None):
     """find a widget by name, by searching the widget hierarchy
     
     name  -- string name of a widget
     
-    start_widget  -- widget to begin search at (default: global Tk)
+    origin  -- widget to begin search at (default: global Tk)
     
     throw  -- if True, raise ValueError on failure to find a widget
     
@@ -199,13 +199,13 @@ def find_named(name, start_widget=None, throw=True, default=None):
     * WidgetNotFound  -- no widget found
     """
     requires_setup()
-    if start_widget is None:
-        start_widget = global_tk
-    return visit_widgets(start_widget, lambda w, d, p: w.winfo_name() == name,
+    if origin is None:
+        origin = global_tk
+    return visit_widgets(origin, lambda w, d, p: w.winfo_name() == name,
                          activity=FIND_NODE)
 
 
-def find(identifier=None, throw=True, default=None):
+def find(identifier=None, origin=None, throw=True, default=None):
     """find a widget, given an identifier
     
     identifier  -- may be one of several things:
@@ -214,6 +214,9 @@ def find(identifier=None, throw=True, default=None):
         a path:  -- returns the widget at the path
         a name:  -- returns first widget found with the name
         a Tk id#:  -- returns the widget with the given #
+    
+    origin  -- where to start searching the widget hierarchy from;
+               if None, search the entire widget tree, DFS, from the top
     
     throw  -- if True, raise ValueError on failure to find a widget
     
@@ -236,7 +239,7 @@ def find(identifier=None, throw=True, default=None):
     elif t == GUESS_TKID:
         return global_tk.nametowidget(global_tk.winfo_pathname(identifier))
     elif t == GUESS_TKNAME:
-        return find_named(identifier)
+        return find_named(identifier, origin)
     else:
         raise WidgetNotFound(identifier)
 
