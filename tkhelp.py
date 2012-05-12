@@ -31,6 +31,7 @@ nmt  -- send web browser to documentation for widget or class
 """
 
 import tkinter
+import _tkinter
 
 
 class Error(Exception):
@@ -122,6 +123,7 @@ GUESS_TKPATH = "GUESS_TKPATH"
 GUESS_TKNAME = "GUESS_TKNAME"
 GUESS_TKID = "GUESS_TKID"
 GUESS_TKEVENT = "GUESS_TKEVENT"
+GUESS_TKPARSEDVARNAME = "GUESS_TKPARSEDVARNAME"
 GUESS_UNKNOWN = "GUESS_UNKNOWN"
 
 def guess(identifier):
@@ -144,6 +146,9 @@ def guess(identifier):
             return GUESS_TKNAME
     elif isinstance(identifier, int):
         return GUESS_TKID
+    elif isinstance(identifier, _tkinter.Tcl_Obj) and hasattr(identifier, "typename"):
+        if identifier.typename == "parsedVarName":
+            return GUESS_TKPARSEDVARNAME
     else:
         return GUESS_UNKNOWN
 
