@@ -294,6 +294,42 @@ def widget_str(identifier, incl_fullpath=True, incl_id=True, incl_class=True):
     return " ".join(parts)
 
 
+def remove_binding(identifier, seq, index=None, funcid=None):
+    """Remove a single binding from a widget.
+    
+    Based on Michael Lange's solution, posted to the tkinter-discuss
+    list, Fri, 11 May 2012 11:59:30 +0200, adapted for the tkhelp
+    module.
+    
+    Raises:
+    * IndexError  -- if index is out of range.
+    * KeyError  -- if funcid is out of range.
+    * ValueError  -- if neither index nor funcid specified.
+    """
+    def _funcid(binding):
+        return binding.split()[1][3:]
+    w = find(identifier)
+    b = [x for x in w.bind(seq).splitlines() if x.strip()]
+    if not index is None:
+        binding = b[index]
+        w.unbind(seq, _funcid(binding))
+        b.remove(binding)
+    elif funcid:
+        binding = None
+        for x in b:
+            if _funcid(x) == funcid:
+                binding = x
+                b.remove(binding)
+                w.unbind(seq, funcid)
+                break
+        if not binding:
+            raise KeyError('Binding "%s" not defined.' % funcid)
+    else:
+        raise ValueError('No index or function id defined.')
+    for x in b:
+        w.bind(seq, '+'+x, 1)
+
+
 def print_hierarchy(top=None, highlight=None, widget_str=widget_str):
     """Print the hierarchy extending from a widget.
     
