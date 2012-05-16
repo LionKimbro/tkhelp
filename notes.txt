@@ -1,0 +1,69 @@
+
+  This document contains miscellaneous notes about the project.
+
+  Much of this will form parts of a tutorial and/or a manual.
+
+
+== Directly Executing Tcl Commands ==
+
+  tkinter uses tcl, which is a complete programming language.
+
+  The architecture stack looks something like this:
+  
+    tkinter    -- Python module for tcl/tk
+    _tkinter   -- C interface between Python and tcl/tk
+       tk      -- the tk library for tcl
+      tcl      -- the tcl programming language
+  
+  tkinter doesn't always give you access to all of the things that tcl
+  can do, and there are many places where tkinter behavior is easier
+  to interrogate and understand, if you have access to tcl.
+
+
+  Here's an example of calling tcl using tkhelp:
+
+>>> from tkhelp import setup, tcl
+>>> setup()
+True                                    <-- this means that the setup() worked
+>>> result = tcl('put "hello, world!"')
+Hello, world!                           <-- output from tcl
+>>> result
+''                                      <-- returnd from tcl
+>>> 
+
+  The tcl(...) function returns [[ED:the string? Python-ized list if list returned? note: update docstring as well]].
+
+  The tcl(...) function is not very magical;  It is simply this:
+
+    def tcl(tcl_code):
+        requires_setup()
+        return global_tk.tk.eval(tcl_code)
+
+  Basically, it's just a wrapper around widget.tk.eval.
+
+  widget.tk was ultimately created at:
+    self.tk = _tkinter.create(screenName, baseName, className, interactive, wantobjects, useTk, sync, use)
+  
+  Here are the pieces behind a tcl(...) call, viewed progressively:
+  
+>>> import tkhelp
+>>> tkhelp.global_tk
+<tkinter.Tk object at 0x00000000022E5B00>
+>>> tkhelp.global_tk.tk
+<tkapp object at 0x00000000023EBB28>
+>>> tkhelp.global_tk.tk.eval
+<built-in method eval of tkapp object at 0x00000000023EBB28>
+  
+  Normally, it's against the principles of the project to create
+  wrappers, but one of the themes of the tkhelp project is access to
+  raw tcl.  "global_tk.tk.eval" is cumbersome and discouraging.
+  Hence, the tcl wrapper.
+
+  Here's an example of creating a GUI with the tcl function.
+  
+>>> from tkhelp import setup, tcl
+>>> setup()
+>>> tcl("""
+[[ED:TODO]]
+""")
+
