@@ -25,6 +25,8 @@ wclass  -- return widget class for a widget
 
 widget_str  -- descriptive string for a widget
 
+remove_binding  -- remove ONE binding from a widget
+
 print_hierarchy  -- print out the widget hierarchy from a widget
 
 nmt  -- send web browser to documentation for widget or class
